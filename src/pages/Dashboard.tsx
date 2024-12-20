@@ -8,18 +8,18 @@ import { Checkbox } from 'primereact/checkbox';
 
 function Dashboard() {
     const [isAdmin, setIsAdmin] = useState<boolean>(true);
-    const dispatch = useDispatch();
-    const {value : productsList, error} = useSelector((state) =>  state.inventory);
-
+    const dispatch = useDispatch<any>();
+    const {value : productsList, error} = useSelector((state: any) =>  state.inventory);
+    console.log({productsList})
     const getMetrics = useCallback(() => {
         const totalProducts = productsList.length;
         const set = new Set();
-        const totalStoreVal = productsList.reduce((acc, item: Product) => {
+        const totalStoreVal = productsList.reduce((acc: number, item: Product) => {
             set.add(item.category);
             return acc + item.value;
         }, 0);
         
-        const outOfStock = productsList.reduce((acc, item: Product) => {
+        const outOfStock = productsList.reduce((acc: number, item: Product) => {
             
             return item.quantity === 0 ? acc + 1 : acc;
         }, 0);

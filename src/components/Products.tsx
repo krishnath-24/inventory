@@ -34,7 +34,7 @@ function Products({products, isAdmin}: ProductsProps) {
         ]
     }, [])
 
-    const updateProduct = (key: string, value: string) => {
+    const updateProduct = (key: string, value: any) => {
         setSelectedProduct(prev => {
             return {
                 ...prev,
@@ -87,7 +87,7 @@ function Products({products, isAdmin}: ProductsProps) {
         setEditProductDialog(prev => !prev);
     }
 
-    const isRowSelectable = (event) => {
+    const isRowSelectable = (event: any) => {
         return !isDisabled(event.data.id);
     }
 
@@ -117,7 +117,7 @@ function Products({products, isAdmin}: ProductsProps) {
                     <div className="flex gap-2">
                         <div className='flex flex-1 flex-column gap-2'>
                             <label htmlFor="quantity">Quantity</label>
-                            <InputText id='quantity'  value={product.quantity} onChange={(e) =>  updateProduct('quantity', e.target.value)} />
+                            <InputText id='quantity'  value={product.quantity+""} onChange={(e) =>  updateProduct('quantity', e.target.value)} />
                         </div>
                         <div className='flex flex-1 flex-column gap-2'>
                             <label htmlFor="value">Value</label>

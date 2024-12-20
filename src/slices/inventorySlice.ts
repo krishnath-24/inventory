@@ -4,19 +4,28 @@ import {v6 as uuid} from 'uuid';
 import { Product } from '../types/types';
 
 
+// Define the initial state type
+interface InventoryState {
+  value: Product[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
+}
 
 export const fetchInventory = createAsyncThunk('inventory/fetchInventory', async () => {
     const response = await api.get('/inventory');
     return response.data as Array<Product>;
 })
 
+// Initial state
+const initialState: InventoryState = {
+  value: [],
+  status: 'idle',
+  error: null,
+};
+
 const inventorySlice = createSlice({
   name: 'inventory', // Name of the slice
-  initialState: {
-    value: [] as Product[], // Initial state
-    status: 'idle',
-    error: null
-  },
+  initialState,
   reducers: {
     updateInventory: (state, action) => {
 
@@ -34,7 +43,7 @@ const inventorySlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchInventory.fulfilled, (state, action) => {
-        state.value = action.payload.map(p => {
+        state.value = action.payload.map((p: any) => {
           return {
             ...p,
             price : parseInt(p.price[0] === '$' ? p.price.substring(1) : p.price),
@@ -46,7 +55,7 @@ const inventorySlice = createSlice({
       })
       .addCase(fetchInventory.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.error.message || 'Failed to fetch inventory';
       });
   }
 });
