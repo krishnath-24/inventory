@@ -10,19 +10,17 @@ function Dashboard() {
     const [isAdmin, setIsAdmin] = useState<boolean>(true);
     const dispatch = useDispatch<any>();
     const {value : productsList, error} = useSelector((state: any) =>  state.inventory);
-
+    console.log(productsList)
     const getMetrics = useCallback(() => {
         const totalProducts = productsList.length;
         const set = new Set();
-        const totalStoreVal = productsList.reduce((acc: number, item: Product) => {
+        const {totalStoreVal, outOfStock} = productsList.reduce((acc: {totalStoreVal: number, outOfStock: number}, item: Product) => {
             set.add(item.category);
-            return acc + item.value;
-        }, 0);
+            acc.totalStoreVal  += (item.price * item.quantity);
+            acc.outOfStock = item.quantity === 0 ? acc.outOfStock + 1 : acc.outOfStock;
+            return acc;
+        }, {totalStoreVal: 0, outOfStock: 0});
         
-        const outOfStock = productsList.reduce((acc: number, item: Product) => {
-            
-            return item.quantity === 0 ? acc + 1 : acc;
-        }, 0);
         const numCategories = set.size;
 
         return [{
