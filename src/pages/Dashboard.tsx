@@ -10,7 +10,7 @@ function Dashboard() {
     const [isAdmin, setIsAdmin] = useState<boolean>(true);
     const dispatch = useDispatch<any>();
     const {value : productsList, error} = useSelector((state: any) =>  state.inventory);
-    console.log({productsList})
+
     const getMetrics = useCallback(() => {
         const totalProducts = productsList.length;
         const set = new Set();
